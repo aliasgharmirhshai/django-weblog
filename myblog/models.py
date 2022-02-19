@@ -26,7 +26,7 @@ class Post(models.Model):
     published = PublishedManager()
 
     def get_absolute_url(self):
-        return reverse("myblog:post_detail", args=[self.publish.year,self.publish.month,self.publish.day,self.slug])
+        return reverse("myblog:post_detail", args=[self.slug])
     
     def __str__(self):
         return self.title
