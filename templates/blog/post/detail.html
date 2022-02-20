@@ -6,4 +6,28 @@
             <a href="{% url 'myblog:post_share' post.id %}" class="btn btn-primary">Share</a>
         </p>
     </div>
+    <div class="m-4">
+        <form method="POST">
+            {% csrf_token %} 
+            {{form.as_p}} 
+            <input  type="submit" class="btn btn-primary" value="send">
+        </form>   
+    </div>
+
+    {% with comments.count as total_comments %}
+        <div class="card m-4">
+            <h3>Number : {{total_comments}}</h3>
+        </div>
+    {% endwith %}
+
+    <div class="m-4">
+        {% for cm in comments %}
+            <div class="card mt-4">
+                {{cm.name}}
+                <br>
+                {{cm.body}}
+                <br>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

@@ -1,14 +1,17 @@
+from pyexpat import model
+from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
+from django.utils.translation import gettext as _
 # Create your models here.
 
 class PublishedManager(models.Manager):
     def get_queryset(self):
         return super(PublishedManager, self).get_queryset().filter(status='published')
 
-
+#Post Models
 class Post(models.Model):
     STATUS = (
         ("draft", 'Draft'),
@@ -32,6 +35,21 @@ class Post(models.Model):
         return self.title
 
 
+#Comment System Models
+class Comments(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    name = models.CharField(_("نام") ,max_length=50)
+    email = models.EmailField(_("ایمیل"), max_length=254, null=True)
+    body = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateField(auto_now=True)
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ('created',)
+
+    def __str__(self):
+        return f'Comment By {self.name}'
 
 
     
