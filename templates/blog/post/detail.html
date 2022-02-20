@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
-    {{post.title}}
+    <div class="m-4">
+        {{post.title}}
+        <p>
+            <a href="{% url 'myblog:post_share' post.id %}" class="btn btn-primary">Share</a>
+        </p>
+    </div>
 {% endblock %}
