@@ -3,34 +3,45 @@ from .models import Post, Comments
 from django.views.generic import ListView
 from .forms import EmailPostForm, CommentForm
 from django.core.mail import send_mail
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseRedirect
+from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
+from taggit.models import Tag
+from django.db.models import Count
 # Create your views here.
 
-# def post_list(request):
-#     #posts = Post.objects.all().filter(status="published")
-#     posts = Post.published.all()
-#     #Create Nest Page
-#     paginator = Paginator(posts , 2)
-#     page = request.GET.get('page')
-#     try:
-#         posts = paginator.page(page)
-#     except PageNotAnInteger:
-#         posts = paginator.page(1)
-#     except EmptyPage:
-#         post = paginator.page(paginator.num_pages)
-#     ######
-#     return render(request, 'blog/post/list.html', {"posts":posts, 'page':page})
+def post_list(request , tag_slug=None):
+    posts = Post.published.all()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag,slug=tag_slug)
+        posts = posts.filter(tags__in=[tag])
 
-class PostListView(ListView):
-    queryset = Post.published.all()
-    context_object_name = "posts"
-    paginate_by = 2
-    template_name = 'blog/post/list.html'
+    paginator = Paginator(posts , 8)
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        post = paginator.page(paginator.num_pages)
+    context = {"posts":posts , 'page':page,"tag":tag}
+    return render(request,'blog/post/list.html',context)
+
+# class PostListView(ListView):
+#     queryset = Post.published.all()
+#     context_object_name = "posts"
+#     paginate_by = 2
+#     template_name = 'blog/post/list.html'
 
 
 def post_detail(request, post):
     post = get_object_or_404(Post,slug=post,status="published")
     comments = post.comments.filter(active=True)
+
+    post_tags_ids = post.tags.values_list('id', flat=True)
+    similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags = Count('tags')).order_by('-same_tags', '-publish')
+
     if request.method == 'POST':
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
@@ -44,7 +55,8 @@ def post_detail(request, post):
     context = {
         "post":post, 
         "form":comment_form,
-        "comments":comments
+        "comments":comments,
+        "s_post":similar_posts,
     }
 
     return render(request, 'blog/post/detail.html', context)
@@ -68,3 +80,6 @@ def post_share(request,post_id):
     else:
         form = EmailPostForm()
     return render(request,'blog/post/share.html',{'post':post,'form':form})
+
+
+

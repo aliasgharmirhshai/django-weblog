@@ -1,10 +1,9 @@
-from pyexpat import model
-from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
 from django.utils.translation import gettext as _
+from taggit.managers import TaggableManager
 # Create your models here.
 
 class PublishedManager(models.Manager):
@@ -27,6 +26,7 @@ class Post(models.Model):
     status = models.CharField(max_length=10, choices=STATUS, default='draft')
     objects = models.Manager()
     published = PublishedManager()
+    tags = TaggableManager()
 
     def get_absolute_url(self):
         return reverse("myblog:post_detail", args=[self.slug])
