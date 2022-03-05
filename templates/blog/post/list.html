@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-
+{% load myblog_tags %}
 
 {% block content %}
 
-
+ <h1> Total Post: {% total_posts %} </h1>
 
     {% if tag %}
       <p>posts with tag : {{tag}}</p>
@@ -20,7 +20,7 @@
     </ul>
 
 
-    {% comment %} <nav aria-label="Page navigation example">
+     <nav aria-label="Page navigation example">
         <ul class="pagination">
             <li class="page-item">   
 
@@ -50,7 +50,7 @@
 
           </li>
         </ul>
-    </nav> {% endcomment %}
+    </nav> 
 
     {% if is_paginated %}
     <ul class="pagination">
