@@ -1,5 +1,8 @@
+from cgitb import text
 from django import template
 from ..models import Post
+from django.utils.safestring import mark_safe
+import markdown
 
 register = template.Library()
 
@@ -14,3 +17,6 @@ def show_latest_post(count=5):
     return {'latest_post':latest_post}
 
 
+@register.filter(name='markdown')
+def markdown_format(text):
+    return mark_safe(markdown.markdown(text))
