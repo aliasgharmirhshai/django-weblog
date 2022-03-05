@@ -4,6 +4,7 @@
 {% block content %}
 
  <h1> Total Post: {% total_posts %} </h1>
+  <h1>Latest Post: {% show_latest_post 3 %}</h1>
 
     {% if tag %}
       <p>posts with tag : {{tag}}</p>
