@@ -11,3 +11,7 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comments
         fields = ("name", "email", "body")
+
+
+class SerachForm(forms.Form):
+    query = forms.CharField()

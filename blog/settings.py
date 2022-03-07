@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     # Site Map
     'django.contrib.sites',
     'django.contrib.sitemaps',
+    # Postgres (Search)
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<form action="{% url 'myblog:post_serach' %}" method="POST">
+    {% csrf_token %} 
+    <input type="text" name="name">
+    <input type="submit" name="submit" value="Search">
+</form>
+
+
+
+{% for result in results %}
+
+    <p>{{result.title}}</p>
+
+{% endfor %}
+    
+{% endblock content %}

@@ -1,12 +1,14 @@
+from re import search
 from django.shortcuts import render, get_object_or_404
 from .models import Post, Comments
 from django.views.generic import ListView
-from .forms import EmailPostForm, CommentForm
+from .forms import EmailPostForm, CommentForm, SerachForm
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator , EmptyPage , PageNotAnInteger
 from taggit.models import Tag
 from django.db.models import Count
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 # Create your views here.
 
 def post_list(request , tag_slug=None):
@@ -80,6 +82,4 @@ def post_share(request,post_id):
     else:
         form = EmailPostForm()
     return render(request,'blog/post/share.html',{'post':post,'form':form})
-
-
 
