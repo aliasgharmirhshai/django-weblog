@@ -7,6 +7,6 @@
 >python3 manage.py runserver
 
 # Introduction
-django_weblog is a relatively simple django project
+django_weblog is a relatively simple django project <br>
 is a relatively simple django project
 this project use django-debug-toolbar , unittest and cbv 
