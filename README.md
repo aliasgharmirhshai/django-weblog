@@ -8,5 +8,5 @@
 
 # Introduction
 django_weblog is a relatively simple django project <br>
-is a relatively simple django project
+is a relatively simple django project <br>
 this project use django-debug-toolbar , unittest and cbv 
